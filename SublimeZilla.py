@@ -5,6 +5,8 @@ import os
 import re
 import binascii
 
+from sys import platform as _platform
+
 from xml.dom import minidom
 
 
@@ -132,8 +134,12 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
             if not os.path.exists(default_xml):
             	default_xml = user_home + os.sep + "Application Data\\FileZilla\\sitemanager.xml"
 
-        elif os.name == 'posix':
+        elif _platform == "linux" or _platform == "linux2":
+            # Linux
             default_xml = user_home + os.sep + ".filezilla/sitemanager.xml"
+        elif _platform == "darwin":
+            # OS X
+            default_xml = user_home + os.sep + ".config/filezilla/sitemanager.xml"
 
         settings = sublime.load_settings("SublimeZilla.sublime-settings")
         path = settings.get("filezilla_db_path", default_xml)
